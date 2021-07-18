@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Untitled1.dxf</file>
+        <file>lines.dxf</file>
+    </qresource>
+</RCC>
