@@ -10,8 +10,8 @@ Line::Line(double x1, double y1, double x2, double y2){
 
 void Line::drawing(QPainter * painter){
     painter->save();
-    QPointF p1(-x1_ * scale, y1_ * scale);
-    QPointF p2(-x2_ * scale, y2_ * scale);
+    QPointF p1(-x1_ * scale_, y1_ * scale_);
+    QPointF p2(-x2_ * scale_, y2_ * scale_);
     painter->drawLine(p1, p2);
     painter->restore();
 }
@@ -47,14 +47,14 @@ Circle::Circle(double x1, double y1, double r){
 
 void Circle::drawing(QPainter * painter){
     painter->save();
-    painter->drawEllipse(-x1_ * scale, y1_ * scale, r_ * scale, r_ * scale);
+    painter->drawEllipse(-x1_ * scale_, y1_ * scale_, r_ * scale_, r_ * scale_);
     painter->restore();
 }
 
 QStringList::iterator Circle::reading(QStringList::iterator &it){
     while(!it->contains("  0")){
         if (it->contains(" 10")){
-            ++it;
+            ++it;//возможно убрать в функцию
             x1_ = it->toDouble();
         }
         if (it->contains(" 20")){
@@ -80,7 +80,7 @@ Arc::Arc(double x1, double y1, double r, double ang1, double ang2){
 
 void Arc::drawing(QPainter * painter){
     painter->save();
-    QRectF rect((-x1_ - r_) * scale, (y1_- r_) * scale, -(r_ * 2) * scale, (r_ * 2) * scale);
+    QRectF rect((-x1_ - r_) * scale_, (y1_- r_) * scale_, -(r_ * 2) * scale_, (r_ * 2) * scale_);
     double a1, a2;
     if (ang1_ < ang2_)
     {
@@ -90,7 +90,8 @@ void Arc::drawing(QPainter * painter){
     else
     {
         a1 = (ang1_ - 180) * angFactor();
-        a2 = qAbs(ang2_ - ang1_) * angFactor();
+        //a2 = qAbs(ang2_ - ang1_) * angFactor();
+        a2 = qAbs(360  - ang1_ + ang2_) * angFactor();
     }
     painter->drawArc(rect, a1, a2);
     painter->restore();
@@ -121,4 +122,9 @@ QStringList::iterator Arc::reading(QStringList::iterator &it){
         ++it;
     }
     return it;
+}
+
+void Elements::setScale(double scale)
+{
+    scale_ = scale;
 }

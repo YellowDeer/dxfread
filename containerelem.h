@@ -10,13 +10,15 @@
 class ContainerElem
 {
 public:
-    QString fileAddr_;
-    FileReader reader_;
+    ContainerElem() = default;
+    ContainerElem(const QString &fileaddr);
+    void setScale(double s);
+    const QVector<Elements*> getVect();
+private:
     QStringList readedData_;
     QVector<Elements*> vect_elem_;
-    FabricElem fabric_;
-    void readAddrAndStart(QString fileaddr);
-    void makeElements();
+
+
 };
 
 #endif // CONTAINERELEM_H

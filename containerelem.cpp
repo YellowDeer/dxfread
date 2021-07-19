@@ -1,12 +1,10 @@
 #include "containerelem.h"
 
-void ContainerElem::readAddrAndStart(QString fileaddr){
-    fileAddr_ = fileaddr;
-    makeElements();
-}
-
-void ContainerElem::makeElements(){
-    readedData_ = reader_.readedFile(fileAddr_);
+ContainerElem::ContainerElem(const QString &fileaddr)
+{
+    FabricElem fabric_;
+    FileReader reader_(fileaddr);
+    readedData_ = reader_.getList();
     QStringList::iterator it = readedData_.begin();
     while (it != readedData_.end()) {
         if (it->contains("ENTITIES")){
@@ -29,4 +27,16 @@ void ContainerElem::makeElements(){
         }
         ++it;
     }
+}
+
+void ContainerElem::setScale(double s)
+{
+    for (auto &&it:vect_elem_){
+        it->setScale(s);
+    }
+}
+
+const QVector<Elements *> ContainerElem::getVect()
+{
+    return vect_elem_;
 }

@@ -1,16 +1,17 @@
 #include "filereader.h"
-FileReader::FileReader(){
 
-}
-
-QStringList FileReader::readedFile(QString fileAddr){
+FileReader::FileReader(const QString &fileAddr){
     QFile file(fileAddr);
-    QStringList readedFile;
     if((file.exists())&&(file.open(QIODevice::ReadOnly)))
     {
         while (!file.atEnd()) {
-            readedFile.append(file.readLine());
+            readedFile_.append(file.readLine());
         }
     }
-    return readedFile;
 }
+
+QStringList FileReader::getList(){
+    return readedFile_;
+}
+
+

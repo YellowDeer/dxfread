@@ -3,13 +3,14 @@
 
 #include <QFile>
 
-
-
 class FileReader
 {
 public:
-    FileReader();
-    QStringList readedFile(QString fileAddr);
+    FileReader(const QString &fileAddr);
+    //QStringList readedFile(QString fileAddr);// убрать в конструктор и сделать get
+    QStringList getList();
+private:
+    QStringList readedFile_;
 };
 
 #endif // FILEREADER_H

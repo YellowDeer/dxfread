@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(ui->doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(slot_scaleImage()));
     d = new DrawerElem(this);
-    d->getVector(":/Untitled1.dxf");
+    d->getFile(":/Untitled1.dxf");
     QGraphicsScene *scene  = new QGraphicsScene;
     scene->addItem(d);
     ui->graphicsView->setScene(scene);

@@ -1,6 +1,6 @@
 #include "drawerelem.h"
 
-DrawerElem::DrawerElem(QObject *parent){
+DrawerElem::DrawerElem(QObject *parent){//неявно вызывался конструктор
 
 }
 
@@ -8,11 +8,10 @@ QRectF DrawerElem::boundingRect() const{
     return QRectF(-500, -500, 1000, 1000);
 }
 
-void DrawerElem::getVector(QString fileAddr){
-    cont.readAddrAndStart(fileAddr);
-    for (auto &&it:cont.vect_elem_){
-        it->scale = 1;
-    }
+void DrawerElem::getFile(const QString &fileAddr){
+    cont = new ContainerElem(fileAddr);//поменять на const QString &
+    cont->setScale(1);
+    vect = cont->getVect();
 }
 
 void DrawerElem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
@@ -21,7 +20,7 @@ void DrawerElem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->rotate(180);
     painter->translate(0, 0);
     painter->setPen(Qt::black);
-    for (auto &&it:cont.vect_elem_){
+    for (auto &&it:vect){
         it->drawing(painter);
     }
     painter->setPen(Qt::red);
@@ -29,8 +28,6 @@ void DrawerElem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 }
 
 void DrawerElem::scale(double scl){
-    for (auto &&it:cont.vect_elem_){
-           it->scale = scl;
-    }
+    cont->setScale(scl);
     this->update();
 }

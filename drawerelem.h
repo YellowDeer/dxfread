@@ -10,10 +10,13 @@ class DrawerElem : public QGraphicsObject
 public:
     explicit DrawerElem(QObject *parent = 0);
     QRectF boundingRect() const override;
-    ContainerElem cont;
-    void getVector(QString fileAddr);
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    void getFile(const QString &fileAddr);
     void scale(double scl);
+private:
+    ContainerElem *cont;
+    QVector<Elements*> vect;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+
 };
 
 #endif // DRAWERELEM_H
