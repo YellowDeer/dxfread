@@ -1,2 +1,3 @@
 # dxfread
-Just a dxf viewer. Only processes lines, circles, arcs.
+Отображение примитивов из файла .dxf (линии, круги, дуги). По умолчнаию открывается файл ресурсов.
+Использована Qt 6.1.2., Cmake.
