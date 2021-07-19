@@ -19,7 +19,7 @@ void MainWindow::slot_scaleImage(){
 }
 
 void MainWindow::slot_open(){
-    QString str = QFileDialog::getOpenFileName();
+    QString str = QFileDialog::getOpenFileName(this, tr("Open File"), "..", tr("DXF ( *.DXF)"));
     delete d;
     d = new DrawerElem(this);
     d->getFile(str);
