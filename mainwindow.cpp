@@ -6,15 +6,25 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow){
     ui->setupUi(this);
     connect(ui->doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(slot_scaleImage()));
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slot_open()));
     d = new DrawerElem(this);
     d->getFile(":/Untitled1.dxf");
-    QGraphicsScene *scene  = new QGraphicsScene;
+    scene  = new QGraphicsScene;
     scene->addItem(d);
     ui->graphicsView->setScene(scene);
 }
 
 void MainWindow::slot_scaleImage(){
     d->scale(ui->doubleSpinBox->value());
+}
+
+void MainWindow::slot_open(){
+    QString str = QFileDialog::getOpenFileName();
+    delete d;
+    d = new DrawerElem(this);
+    d->getFile(str);
+    scene->addItem(d);
+    ui->graphicsView->setScene(scene);
 }
 
 MainWindow::~MainWindow(){
