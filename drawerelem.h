@@ -13,6 +13,7 @@ public:
     QRectF boundingRect() const override;
     void getFile(const QString &fileAddr);
     void scale(double scl);
+    double scale_;
 private:
     QSharedPointer<ContainerElem> container_;
     std::vector<Elements*> vect_;

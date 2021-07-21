@@ -1,7 +1,7 @@
 #include "drawerelem.h"
 
 DrawerElem::DrawerElem(QObject *parent){
-
+    scale_ = 1;
 }
 
 QRectF DrawerElem::boundingRect() const{
@@ -11,7 +11,7 @@ QRectF DrawerElem::boundingRect() const{
 void DrawerElem::getFile(const QString &fileAddr){
     const std::string str = fileAddr.toStdString();
     container_ = QSharedPointer<ContainerElem>(new ContainerElem(str));
-    container_->setScale(1);
+    container_->setScale(scale_);
     vect_ = container_->getVect();
 }
 
@@ -51,6 +51,9 @@ void DrawerElem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 }
 
 void DrawerElem::scale(double scl){
+    if (container_ == nullptr)
+        return;
+    scale_ = scl;
     container_->setScale(scl);
     this->update();
 }

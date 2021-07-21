@@ -19,7 +19,7 @@ public:
     DrawerElem *d;
     QGraphicsScene *scene;
 public slots:
-//    void slotScaleImage(double s);
+    //void slotScaleImage(double s);
     void slotOpen();
 
 private:
