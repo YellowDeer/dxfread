@@ -1,16 +1,19 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 
-#include <QFile>
+#include <iostream>
+#include <vector>
+#include <fstream>
+
+using namespace std;
 
 class FileReader
 {
 public:
-    FileReader(const QString &fileAddr);
-    //QStringList readedFile(QString fileAddr);// убрать в конструктор и сделать get
-    QStringList getList();
+    FileReader(const string &fileAddr);
+    vector<string> getList();
 private:
-    QStringList readedFile_;
+    vector<string> readedFile_;
 };
 
 #endif // FILEREADER_H

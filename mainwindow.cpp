@@ -1,26 +1,21 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
+#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow){
     ui->setupUi(this);
-    connect(ui->doubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(slot_scaleImage()));
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(slot_open()));
-    d = new DrawerElem(this);
-    d->getFile(":/Untitled1.dxf");
+    connect(ui->doubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),[=](double s){ d->scale(s);});
+    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::slotOpen);
     scene  = new QGraphicsScene;
     scene->addItem(d);
     ui->graphicsView->setScene(scene);
 }
 
-void MainWindow::slot_scaleImage(){
-    d->scale(ui->doubleSpinBox->value());
-}
-
-void MainWindow::slot_open(){
+void MainWindow::slotOpen(){
     QString str = QFileDialog::getOpenFileName(this, tr("Open File"), "..", tr("DXF ( *.DXF)"));
-    delete d;
+    if (d != nullptr)
+        delete d;
     d = new DrawerElem(this);
     d->getFile(str);
     scene->addItem(d);

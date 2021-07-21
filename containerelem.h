@@ -1,22 +1,22 @@
 #ifndef CONTAINERELEM_H
 #define CONTAINERELEM_H
 
-#include <QVector>
-
 #include "fabricelem.h"
 #include "elements.h"
 #include "filereader.h"
+
+using namespace std;
 
 class ContainerElem
 {
 public:
     ContainerElem() = default;
-    ContainerElem(const QString &fileaddr);
+    ContainerElem(const string &fileaddr);
     void setScale(double s);
-    const QVector<Elements*> getVect();
+    const vector<Elements*> &getVect();
 private:
-    QStringList readedData_;
-    QVector<Elements*> vect_elem_;
+    vector<string> readedData_;
+    vector<Elements*> vect_elem_;
 
 
 };

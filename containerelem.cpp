@@ -1,29 +1,34 @@
 #include "containerelem.h"
 
-ContainerElem::ContainerElem(const QString &fileaddr)
+ContainerElem::ContainerElem(const string &fileaddr)
 {
     FabricElem fabric_;
     FileReader reader_(fileaddr);
     readedData_ = reader_.getList();
-    QStringList::iterator it = readedData_.begin();
-    while (it != readedData_.end()) {
-        if (it->contains("ENTITIES")){
+    vector<string>::iterator it = readedData_.begin();
+    string entities_ = "ENTITIES";
+    string line_ = "LINE";
+    string circle_ = "CIRCLE";
+    string arc_ = "ARC";
+    string endsec_ = "ENDSEC";
+    while ((it != readedData_.cend()) && (readedData_.size()>0)) {
+        if (it->data() == entities_){
             do{
-                if (it->contains("LINE")){
-                    vect_elem_.append(fabric_.makeLine());
+                if (it->data() == line_){
+                    vect_elem_.push_back(fabric_.makeLine());
                     it = vect_elem_.back()->reading(it);
                 }
-                if (it->contains("CIRCLE")){
-                    vect_elem_.append(fabric_.makeCircle());
+                if (it->data() == circle_){
+                    vect_elem_.push_back(fabric_.makeCircle());
                     it = vect_elem_.back()->reading(it);
                 }
-                if (it->contains("ARC")){
-                    vect_elem_.append(fabric_.makeArc());
+                if (it->data() == arc_){
+                    vect_elem_.push_back(fabric_.makeArc());
                     it = vect_elem_.back()->reading(it);
                 }
                 ++it;
             }
-            while(!it->contains("ENDSEC"));
+            while(it->data() != endsec_);
         }
         ++it;
     }
@@ -36,7 +41,6 @@ void ContainerElem::setScale(double s)
     }
 }
 
-const QVector<Elements *> ContainerElem::getVect()
-{
-    return vect_elem_;
+const vector<Elements *> &ContainerElem::getVect(){
+    return   vect_elem_;
 }

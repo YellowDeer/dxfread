@@ -19,8 +19,8 @@ public:
     DrawerElem *d;
     QGraphicsScene *scene;
 public slots:
-    void slot_scaleImage();
-    void slot_open();
+//    void slotScaleImage(double s);
+    void slotOpen();
 
 private:
     Ui::MainWindow *ui;

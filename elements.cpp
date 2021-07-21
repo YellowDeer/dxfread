@@ -5,34 +5,36 @@ Line::Line(double x1, double y1, double x2, double y2){
     y1_ = y1;
     x2_ = x2;
     y2_ = y2;
+    scale_ = 1;
 }
 
-
-void Line::drawing(QPainter * painter){
-    painter->save();
-    QPointF p1(-x1_ * scale_, y1_ * scale_);
-    QPointF p2(-x2_ * scale_, y2_ * scale_);
-    painter->drawLine(p1, p2);
-    painter->restore();
+vector<double> Line::getPoint(){
+    vector<double> points_;
+    points_.push_back(LINE);
+    points_.push_back(x1_ * scale_);
+    points_.push_back(y1_ * scale_);
+    points_.push_back(x2_ * scale_);
+    points_.push_back(y2_ * scale_);
+    return points_;
 }
 
-QStringList::iterator Line::reading(QStringList::iterator &it){
-    while(!it->contains("  0")){
-        if (it->contains(" 10")){
+vector<string>::iterator Line::reading(vector<string>::iterator &it){
+    while(it->data() != strEnd_){
+        if (strX1_ == it->data()){
             ++it;
-            x1_ = it->toDouble();
+            x1_ = stod(it->data());
         }
-        if (it->contains(" 20")){
+        if (it->data() == strY1_){
             ++it;
-            y1_ = it->toDouble();
+            y1_ = stod(it->data());
         }
-        if (it->contains(" 11")){
+        if (it->data() == strX2_){
             ++it;
-            x2_ = it->toDouble();
+            x2_ = stod(it->data());
         }
-        if (it->contains(" 21")){
+        if (it->data() == strY2_){
             ++it;
-            y2_ = it->toDouble();
+            y2_ = stod(it->data());
         }
         ++it;
     }
@@ -43,27 +45,31 @@ Circle::Circle(double x1, double y1, double r){
     x1_ = x1;
     y1_ = y1;
     r_ = r;
+    scale_ = 1;
 }
 
-void Circle::drawing(QPainter * painter){
-    painter->save();
-    painter->drawEllipse(-x1_ * scale_, y1_ * scale_, r_ * scale_, r_ * scale_);
-    painter->restore();
+vector<double> Circle::getPoint(){
+    vector<double> points_;
+    points_.push_back(CIRCLE);
+    points_.push_back(x1_ * scale_);
+    points_.push_back(y1_ * scale_);
+    points_.push_back(r_ * scale_);
+    return points_;
 }
 
-QStringList::iterator Circle::reading(QStringList::iterator &it){
-    while(!it->contains("  0")){
-        if (it->contains(" 10")){
-            ++it;//возможно убрать в функцию
-            x1_ = it->toDouble();
-        }
-        if (it->contains(" 20")){
+vector<string>::iterator Circle::reading(vector<string>::iterator &it){
+    while(it->data() != strEnd_){
+        if (it->data() == strX1_){
             ++it;
-            y1_ = it->toDouble();
+            x1_ = stod(it->data());
         }
-        if (it->contains(" 40")){
+        if (it->data() == strY1_){
             ++it;
-            r_ = it->toDouble();
+            y1_ = stod(it->data());
+        }
+        if (it->data() == strR_){
+            ++it;
+            r_ = stod(it->data());
         }
         ++it;
     }
@@ -76,48 +82,41 @@ Arc::Arc(double x1, double y1, double r, double ang1, double ang2){
     r_ = r;
     ang1_ = ang1;
     ang2_ = ang2;
+    scale_ = 1;
 }
 
-void Arc::drawing(QPainter * painter){
-    painter->save();
-    QRectF rect((-x1_ - r_) * scale_, (y1_- r_) * scale_, -(r_ * 2) * scale_, (r_ * 2) * scale_);
-    double a1, a2;
-    if (ang1_ < ang2_)
-    {
-        a1 = (ang1_ - 180) * angFactor();
-        a2 = qAbs(ang2_ - ang1_) * angFactor();
-    }
-    else
-    {
-        a1 = (ang1_ - 180) * angFactor();
-        //a2 = qAbs(ang2_ - ang1_) * angFactor();
-        a2 = qAbs(360  - ang1_ + ang2_) * angFactor();
-    }
-    painter->drawArc(rect, a1, a2);
-    painter->restore();
+vector<double> Arc::getPoint(){
+    vector<double> points_;
+    points_.push_back(ARC);
+    points_.push_back(x1_ * scale_);
+    points_.push_back(y1_ * scale_);
+    points_.push_back(r_ * scale_);
+    points_.push_back(ang1_);
+    points_.push_back(ang2_);
+    return points_;
 }
 
-QStringList::iterator Arc::reading(QStringList::iterator &it){
-    while(!it->contains("  0")){
-        if (it->contains(" 10")){
+vector<string>::iterator Arc::reading(vector<string>::iterator &it){
+    while(it->data() != strEnd_){
+        if (it->data() == strX1_){
             ++it;
-            x1_ = it->toDouble();
+            x1_ = stod(it->data());
         }
-        if (it->contains(" 20")){
+        if (it->data() == strY1_){
             ++it;
-            y1_ = it->toDouble();
+            y1_ = stod(it->data());
         }
-        if (it->contains(" 40")){
+        if (it->data() == strR_){
             ++it;
-            r_ = it->toDouble();
+            r_ = stod(it->data());
         }
-        if (it->contains(" 50")){
+        if (it->data() == strAng1_){
             ++it;
-            ang1_ = it->toDouble();
+            ang1_ = stod(it->data());
         }
-        if (it->contains(" 51")){
+        if (it->data() == strAng2_){
             ++it;
-            ang2_ = it->toDouble();
+            ang2_ = stod(it->data());
         }
         ++it;
     }
@@ -126,5 +125,8 @@ QStringList::iterator Arc::reading(QStringList::iterator &it){
 
 void Elements::setScale(double scale)
 {
-    scale_ = scale;
+    if(scale < 0)
+        scale_ = 0;
+    else
+        scale_ = scale;
 }

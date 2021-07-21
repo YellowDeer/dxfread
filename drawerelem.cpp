@@ -1,6 +1,6 @@
 #include "drawerelem.h"
 
-DrawerElem::DrawerElem(QObject *parent){//неявно вызывался конструктор
+DrawerElem::DrawerElem(QObject *parent){
 
 }
 
@@ -9,9 +9,10 @@ QRectF DrawerElem::boundingRect() const{
 }
 
 void DrawerElem::getFile(const QString &fileAddr){
-    cont = new ContainerElem(fileAddr);//поменять на const QString &
-    cont->setScale(1);
-    vect = cont->getVect();
+    const std::string str = fileAddr.toStdString();
+    container_ = QSharedPointer<ContainerElem>(new ContainerElem(str));
+    container_->setScale(1);
+    vect_ = container_->getVect();
 }
 
 void DrawerElem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
@@ -20,14 +21,36 @@ void DrawerElem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->rotate(180);
     painter->translate(0, 0);
     painter->setPen(Qt::black);
-    for (auto &&it:vect){
-        it->drawing(painter);
+    for (auto &&it:vect_){
+        std::vector<double> tmpVect_ = it->getPoint();
+        if (tmpVect_.at(0) == TypesEntities::LINE){
+                QPointF p1(-tmpVect_.at(1), tmpVect_.at(2));
+                QPointF p2(-tmpVect_.at(3), tmpVect_.at(4));
+                painter->drawLine(p1, p2);
+        }
+        if (tmpVect_.at(0) == TypesEntities::CIRCLE){
+                QPointF p1(-tmpVect_.at(1), tmpVect_.at(2));
+                painter->drawEllipse(p1, tmpVect_.at(3), tmpVect_.at(3));
+        }
+        if (tmpVect_.at(0) == TypesEntities::ARC){
+                QRectF rect((-tmpVect_.at(1) + tmpVect_.at(3)), (tmpVect_.at(2)- tmpVect_.at(3)), -(tmpVect_.at(3) * 2), (tmpVect_.at(3) * 2));
+                double a1, a2;
+                if (tmpVect_.at(4) < tmpVect_.at(5)){
+                    a1 = (tmpVect_.at(4) - 180) * angFactor();
+                    a2 = qAbs(tmpVect_.at(5) - tmpVect_.at(4)) * angFactor();
+                }
+                else{
+                    a1 = (tmpVect_.at(4) - 180) * angFactor();
+                    a2 = qAbs(360  - tmpVect_.at(4) + tmpVect_.at(5)) * angFactor();
+                }
+                painter->drawArc(rect, a1, a2);
+        }
     }
     painter->setPen(Qt::red);
-    painter->drawEllipse(0, 0, 50, 50);
+    painter->drawEllipse(QPointF(0, 0), 50, 50);
 }
 
 void DrawerElem::scale(double scl){
-    cont->setScale(scl);
+    container_->setScale(scl);
     this->update();
 }

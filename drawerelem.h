@@ -2,6 +2,7 @@
 #define DRAWERELEM_H
 
 #include <QGraphicsObject>
+#include <QPainter>
 #include "containerelem.h"
 
 class DrawerElem : public QGraphicsObject
@@ -13,9 +14,12 @@ public:
     void getFile(const QString &fileAddr);
     void scale(double scl);
 private:
-    ContainerElem *cont;
-    QVector<Elements*> vect;
+    QSharedPointer<ContainerElem> container_;
+    std::vector<Elements*> vect_;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    inline int angFactor(){
+        return 16; //factor to Qt degrees
+    };
 
 };
 
